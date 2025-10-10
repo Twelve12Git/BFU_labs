@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.15)
+project(TWMWindowManager)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(XCB REQUIRED xcb xcb-keysyms) 
+
+add_library(twm_core 
+    src/core/event.cpp 
+    src/core/keys.cpp
+)
+
+target_include_directories(twm_core PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(twm_core ${XCB_LIBRARIES})
+target_include_directories(twm_core PUBLIC ${XCB_INCLUDE_DIRS})
+target_compile_options(twm_core PRIVATE -Wall -Wextra -Wpedantic)
+
+add_executable(twm src/main.cpp)
+target_link_libraries(twm twm_core ${XCB_LIBRARIES})
