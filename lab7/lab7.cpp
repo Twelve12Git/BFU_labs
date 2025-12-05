@@ -1,7 +1,7 @@
 #include <iostream>
 
 // лаба 7 вариант 4
-#define USE_VECTOR false // переключить вектор-массив
+#define USE_VECTOR false// переключить вектор-массив
 
 using data_t = int;
 struct option
@@ -54,28 +54,54 @@ int main(){
 }
 #else // пункт 2
 #include <array>
-#define ARR_SIZE 10
+#include <cstdlib>
+
+std::array<int, 10> sort_arr_and_copy(std::array<int, 10> arr){
+    for(int i = 0; i < arr.size(); i++){
+        for(int j = i+1; j < arr.size(); j++){
+            if (arr[i] < arr[j]) std::swap(arr[i], arr[j]);
+        }
+    }
+    return arr;
+}
+
+void sort_arr(std::array<int, 10>& arr){
+    for(int i = 0; i < arr.size(); i++){
+        for(int j = i+1; j < arr.size(); j++){
+            if (arr[i] < arr[j]) std::swap(arr[i], arr[j]);
+        }
+    }
+}
+
+void sort_arr(std::array<int, 10>* arr){
+    for(int i = 0; i < arr->size(); i++){
+        for(int j = i+1; j < arr->size(); j++){
+            if ((*arr)[i] < (*arr)[j]) std::swap((*arr)[i], (*arr)[j]);
+        }
+    }
+}
+
+void print_arr(const std::array<int, 10>& arr){
+    for(auto el: arr) std::cout<<el<<"\t"; std::cout<<std::endl;
+}
 
 int main(){
-    const size_t options_count = 7;
+    std::array<int, 10> arr;
 
-
-    option options[] = {
-        // {"Exit", [](){exit(0);}},
-        // {"Show array", },
-        // {"Add element to begin", },
-        // {"Add element to end", }
-        // {"Clear array", },
-        // {"Find element", },
-        // {"Do special action",  }
-    };
-
-    while(true){
-        std::cout<<"Select option: \n";
-        for(int i = 0; i < options_count; i++) std::cout << "(" <<i<< ") " << options[i].description << std::endl;
-        size_t option; std::cin>>option; if (option > options_count) continue;
-        options[option].handler();
-    }
+    for(int i = 0; i < 10; i++) arr[i] = std::rand() % 21 - 10;
+    print_arr(arr);
+    arr = sort_arr_and_copy(arr);
+    print_arr(arr);
+    std::cout<<"\n------------\n";
+    for(int i = 0; i < 10; i++) arr[i] = std::rand() % 21 - 10;
+    print_arr(arr);
+    sort_arr(arr);
+    print_arr(arr);
+    std::cout<<"\n------------\n";
+    for(int i = 0; i < 10; i++) arr[i] = std::rand() % 21 - 10;
+    print_arr(arr);
+    sort_arr(&arr);
+    print_arr(arr);
 
     return 0;
 }
